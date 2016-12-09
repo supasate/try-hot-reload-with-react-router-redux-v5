@@ -2,27 +2,33 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import App from './components/App'
-import { createStore, applyMiddleware, compose } from 'redux'
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
+import { ConnectedRouter, routerReducer } from 'react-router-redux'
 
 
-const reducer = (state = { count: 0 }, action) => {
+const countReducer = (state = 0, action) => {
   switch (action.type) {
     case 'INCREMENT':
-      return {
-        count: state.count + 1
-      }
+      return state + 1
     default:
       return state
   }
 }
 
-const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+const rootReducer = combineReducers({
+  count: countReducer,
+  router: routerReducer,
+})
+
+const store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 ReactDOM.render(
   <AppContainer>
     <Provider store={store}>
-      <App />
+      <ConnectedRouter>
+        <App />
+      </ConnectedRouter>
     </Provider>
   </AppContainer>, document.getElementById('react-root'))
 
@@ -32,7 +38,9 @@ if (module.hot) {
     ReactDOM.render(
       <AppContainer>
         <Provider store={store}>
-          <NextApp />
+          <ConnectedRouter>
+            <NextApp />
+          </ConnectedRouter>
         </Provider>
       </AppContainer>, document.getElementById('react-root'))
   })
