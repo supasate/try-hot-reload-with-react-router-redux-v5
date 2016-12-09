@@ -20,7 +20,7 @@ class Counter extends Component {
         {this.props.count}
         <br />
         <button onClick={this.clickHandler}>+</button>
-        hissss
+        hi
       </div>
     )
   }
